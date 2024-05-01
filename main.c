@@ -41,6 +41,7 @@ fclose(file);
 return false;
 }
 
+
 void removeChar(char arr[], char target) {
     int len = strlen(arr);
     int found = 0;
@@ -106,6 +107,19 @@ if (gameState == 0) {
                 wordY = HEIGHT / 1.2;
                 DrawRectangle(wordX, wordY, BUTTON_SIZE, BUTTON_SIZE, LIGHTGRAY);
                 DrawText(TextFormat("%c", selectedWord[j]), wordX + 15, wordY + 15, 20, BLACK);
+            }
+            
+            // Draw reload button
+            DrawRectangle(WIDTH - 100, HEIGHT - 50, 80, 30, LIGHTGRAY);
+            DrawText("RELOAD", WIDTH - 100, HEIGHT - 50, 20, BLACK);
+
+            // Check for mouse input on reload button
+            if (CheckCollisionPointRec(GetMousePosition(), (Rectangle){WIDTH - 100, HEIGHT - 50, 80, 30})) {
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                    // Reset button states and selected word
+                    memset(buttonUsed, 0, sizeof(buttonUsed));
+                    strcpy(selectedWord, "");
+                }
             }
                        
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
