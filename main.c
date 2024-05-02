@@ -7,6 +7,7 @@
 #define BUTTON_SIZE 50
 #define WORDLIST_FILE "wordlist.txt"
 #define MAX_WORD_LENGTH 500
+#define TIMER 60
 
 char buttons[MAX_BUTTONS];
 bool buttonUsed[MAX_BUTTONS] = {0};
@@ -49,6 +50,7 @@ int main() {
     Texture2D backgroundImage = LoadTexture("asd.png");
     SetTargetFPS(60);
     int gameState = 0;
+    float timer = TIMER; // Timer limit (60 seconds)
 
     generateButtons();
 
@@ -68,6 +70,15 @@ int main() {
             }
         } else if (gameState == 1) {
             DrawText(TextFormat("Score: %d", score), WIDTH / 2 - MeasureText("Score: 00", 30) / 2, 20, 30, WHITE);
+            
+            // Draw the timer
+            int minutes = (int)timer / 60;
+            int seconds = (int)timer % 60;
+            DrawText(TextFormat("%02d:%02d", minutes, seconds), WIDTH - 150, 20, 30, WHITE);
+            // Update the timer
+            timer -= GetFrameTime();
+          
+
      
             int totalButtonsWidth = 7 * (BUTTON_SIZE + 10);
             int rows = (MAX_BUTTONS + 6) / 7; // Calculate number of rows
@@ -101,6 +112,8 @@ int main() {
                     DrawRectangle(WIDTH - 100, HEIGHT - 40, 90, 30 , LIGHTGRAY);
                     DrawText("RELOAD", WIDTH - 95, HEIGHT - 35 , 20, BLACK);
                     
+                    
+                    
                     if (CheckCollisionPointRec(GetMousePosition(), (Rectangle){WIDTH - 90, HEIGHT - 40, 90, 30})) {
                         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                             memset(buttonUsed, 0, sizeof(buttonUsed));
@@ -125,22 +138,48 @@ int main() {
                         }
                     }
                     
-                    // Check for mouse input on clear button
-                    if (CheckCollisionPointRec(GetMousePosition(), (Rectangle){WIDTH - 100, HEIGHT - 80, 90, 30})) {
-                        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                            // Reset button states and selected word
-                            if (!checkWord(selectedWord)) {
-                                memset(buttonUsed, 0, sizeof(buttonUsed));
-                                strcpy(selectedWord, "");
-                            }
-                        }
-                    }
+                    
+              if (CheckCollisionPointRec(GetMousePosition(), (Rectangle){WIDTH - 100, HEIGHT - 80, 90, 30})) {
+              if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                   for (int i = 0; i < strlen(selectedWord); i++) {
+                   for (int j = 0; j < MAX_BUTTONS; j++) {
+                   if (selectedWord[i] == buttons[j] && buttonUsed[j]) {
+                    buttonUsed[j] = false;
+                    
+                }
+            }
+        }
+        strcpy(selectedWord, "");
+    }
+}
+
+            // Check if the timer has reached 0
+            if (timer <= 0) {
+                gameState = 3; // Change the game state to GAME_OVER
+            }
+                  
                 }
             }   
         } else if (gameState == 2) {
             CloseWindow();
         }
+   
+        else if (gameState == 3) {
+            // Display the score screen
+            DrawText("GAME OVER", WIDTH / 2 - MeasureText("GAME OVER", 50) / 2, HEIGHT / 2 - 100, 50, WHITE);
+            DrawText(TextFormat("Score: %d", score), WIDTH / 2 - MeasureText("Score: 00", 30) / 2, HEIGHT / 2, 30, WHITE);
+            DrawText("Press SPACE to continue", WIDTH / 2, HEIGHT / 2 + 50, 20, WHITE);
 
+            // Check if the user has pressed SPACE to continue
+            if (IsKeyPressed(KEY_SPACE)) {
+                gameState = 0; // Reset the game state
+                score = 0; // Reset the score
+                memset(buttonUsed, 0, sizeof(buttonUsed));
+                strcpy(selectedWord, "");
+                generateButtons();
+                timer = TIMER; // Reset the timer
+            }
+        }
     EndDrawing();
     }
     CloseWindow();
