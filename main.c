@@ -9,9 +9,9 @@
 #define MAX_WORD_LENGTH 500
 #define TIMER 60
 
-char buttons[MAX_BUTTONS];
-bool buttonUsed[MAX_BUTTONS] = {0};
-char selectedWord[MAX_WORD_LENGTH] = "";
+char buttons[MAX_BUTTONS]; // Array to store buttons
+bool buttonUsed[MAX_BUTTONS] = {0}; // Array to track if a button is used
+char selectedWord[MAX_WORD_LENGTH] = ""; // String to store selected word
 int score = 0;
 
 void generateButtons() {
@@ -48,9 +48,10 @@ int main() {
     InitWindow(WIDTH, HEIGHT, "Word Game");
 
     Texture2D backgroundImage = LoadTexture("asd.png");
-    SetTargetFPS(60);
+    SetTargetFPS(60); // Set target frames per second
+    
     int gameState = 0;
-    float timer = TIMER; // Timer limit (60 seconds)
+    float timer = TIMER; 
 
     generateButtons();
 
@@ -75,15 +76,15 @@ int main() {
             int minutes = (int)timer / 60;
             int seconds = (int)timer % 60;
             DrawText(TextFormat("%02d:%02d", minutes, seconds), WIDTH - 150, 20, 30, WHITE);
-            // Update the timer
-            timer -= GetFrameTime();
+           
+            timer -= GetFrameTime();  // Update the timer
           
 
      
             int totalButtonsWidth = 7 * (BUTTON_SIZE + 10);
             int rows = (MAX_BUTTONS + 6) / 7; // Calculate number of rows
             int totalButtonsHeight = rows * (BUTTON_SIZE + 10); // Calculate total height
-            int buttonsStartX = (WIDTH - totalButtonsWidth) / 2;
+            int buttonsStartX = (WIDTH - totalButtonsWidth) / 2; // Adjust start X position
             int buttonsStartY = (HEIGHT - totalButtonsHeight) / 2; // Adjust start Y position
             int x, y;
             int wordX, wordY;
@@ -104,16 +105,16 @@ int main() {
                         DrawText(TextFormat("%c", selectedWord[j]), wordX + 15, wordY + 15, 20, BLACK);
                     }
                     
-                    // Draw clear button
+                    
                     DrawRectangle(WIDTH - 100, HEIGHT - 80, 90, 30 , LIGHTGRAY);
                     DrawText("CLEAR", WIDTH - 90, HEIGHT - 75 , 20, BLACK);
                     
-                    // Draw reload board button
+                    
                     DrawRectangle(WIDTH - 100, HEIGHT - 40, 90, 30 , LIGHTGRAY);
                     DrawText("RELOAD", WIDTH - 95, HEIGHT - 35 , 20, BLACK);
                     
                     
-                    
+                    //
                     if (CheckCollisionPointRec(GetMousePosition(), (Rectangle){WIDTH - 90, HEIGHT - 40, 90, 30})) {
                         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                             memset(buttonUsed, 0, sizeof(buttonUsed));
@@ -121,7 +122,7 @@ int main() {
                             generateButtons();
                         }
                     }
-
+                    //
                     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                         if (CheckCollisionPointRec(GetMousePosition(), (Rectangle){x, y, BUTTON_SIZE, BUTTON_SIZE})) {
                             buttonUsed[i] = true;
@@ -153,19 +154,19 @@ int main() {
     }
 }
 
-            // Check if the timer has reached 0
             if (timer <= 0) {
-                gameState = 3; // Change the game state to GAME_OVER
+                gameState = 3; 
             }
                   
-                }
-            }   
+          }
+       } 
+       
         } else if (gameState == 2) {
             CloseWindow();
         }
    
         else if (gameState == 3) {
-            // Display the score screen
+            
             DrawText("GAME OVER", WIDTH / 2 - MeasureText("GAME OVER", 50) / 2, HEIGHT / 2 - 100, 50, WHITE);
             DrawText(TextFormat("Score: %d", score), WIDTH / 2 - MeasureText("Score: 00", 30) / 2, HEIGHT / 2, 30, WHITE);
             DrawText("Press SPACE to continue", WIDTH / 2, HEIGHT / 2 + 50, 20, WHITE);
