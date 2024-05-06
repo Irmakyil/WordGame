@@ -1,4 +1,4 @@
-Kocaeli University Programlama/Programlama Lab Project
+Kocaeli University Programming/Programming Lab Project
 **************************************************************
 WORD GAME
 Description:
