@@ -20,11 +20,6 @@ Score points by forming valid words.
 The game ends when the timer reaches zero.
 Press SPACE to restart the game after it ends.
 *******************************************************************
-Controls:
-SPACE: Start game / Continue after game over.
-ESCAPE: Exit game.
-LEFT MOUSE CLICK: Select letters / Interact with buttons.
-*********************************************************************
 Requirements:
 Raylib library for graphics.
 "wordlist.txt" file containing a list of valid words.
